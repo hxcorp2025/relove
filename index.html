@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Quiz de Relacionamento</title>
     
     <style>
@@ -15,18 +15,26 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: #f5f5f5;
             color: #333;
             overflow-x: hidden;
         }
         
-        .quiz-container {
-            max-width: 480px;
+        .page-wrapper {
+            max-width: 384px;
             margin: 0 auto;
             background: #f5f5f5;
             min-height: 100vh;
             position: relative;
+        }
+        
+        /* QUIZ STYLES */
+        .quiz-container {
+            display: block;
+        }
+        
+        .quiz-container.hidden {
+            display: none;
         }
         
         .slide {
@@ -53,7 +61,7 @@
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            max-width: 480px;
+            max-width: 384px;
             background: #fff;
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -137,6 +145,45 @@
             border-color: transparent;
         }
         
+        .email-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            font-size: 16px;
+            margin: 20px 0;
+            background: #fff;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: #3a78e6;
+        }
+        
+        .continue-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .continue-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         /* Progress Bar Circular */
         .progressbar-widget {
             display: flex;
@@ -197,12 +244,464 @@
             transition: stroke-dashoffset 0.3s linear;
         }
         
+        .loading-text {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .magic-screen-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+        
+        .text-additional {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.3;
+        }
+        
+        /* OFFER PAGE STYLES */
+        .offer-container {
+            display: none;
+            padding-top: 100px;
+            padding-bottom: 50px;
+            padding-left: 32px;
+            padding-right: 32px;
+        }
+        
+        .offer-container.active {
+            display: block;
+        }
+        
+        /* Timer Widget */
+        .timer-wrapper {
+            background: #FFFFFF;
+            position: fixed;
+            top: 7px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0px 16px 32px 0px rgba(0, 82, 163, 0.32);
+            border-radius: 48px;
+            padding: 8px 7px 8px 19px;
+            align-items: center;
+            z-index: 10;
+            width: 311px;
+            column-gap: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .timer-wrapper .time {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 130%;
+            letter-spacing: -0.64px;
+            color: #0080FF;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .timer-wrapper .time span {
+            display: block;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 100%;
+            letter-spacing: 0.22px;
+        }
+        
+        .timer-wrapper .button {
+            text-decoration: none;
+            display: block;
+            border-radius: 48px;
+            font-size: 16px;
+            line-height: 1;
+            font-weight: 500;
+            background: linear-gradient(135deg, #0074E8 0%, #1429DE 55.21%, #2B0087 100%);
+            color: #ffffff;
+            white-space: nowrap;
+            padding: 18px 24px;
+            border: none;
+            letter-spacing: 0.32px;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            height: 52px;
+            width: 100%;
+        }
+        
+        .timer-wrapper .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Promo Section */
+        .promo {
+            position: relative;
+            padding-top: 40px;
+            margin-bottom: 26px;
+        }
+        
+        .promo .header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+        
+        .promo .header-item {
+            width: 100%;
+            text-align: center;
+            display: block;
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 31px;
+        }
+        
+        .promo .header-item:last-child {
+            background: linear-gradient(95.43deg, #0074E8 28.16%, #002ABF 41.28%, #430098 52.93%, #A00090 69.56%);
+            background-clip: border-box;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .image-widget {
+            width: 100%;
+            position: relative;
+        }
+        
+        .image-widget .image-widget-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 32px;
+        }
+        
+        .image-widget.wo-br .image-widget-container {
+            border-radius: 0;
+        }
+        
+        .image-widget img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .promo-info {
+            list-style: none;
+            padding: 0;
+            margin: 26px 0;
+        }
+        
+        .promo-info li {
+            padding: 16px 24px;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 16px;
+            background: rgba(235, 235, 235, 0.50);
+        }
+        
+        .promo-info li .icon {
+            width: 32px;
+            height: 32px;
+            background: #0080FF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Box styles */
+        .box {
+            margin-bottom: 26px;
+        }
+        
+        .title {
+            color: #000;
+            text-align: center;
+            font-size: 21px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: -0.21px;
+            margin: 0 0 18px 0;
+        }
+        
+        .title.title-highlight {
+            background: linear-gradient(90deg, #0080ff 20.61%, #0400bf 38.17%, #bf008a 55.02%);
+            background-clip: border-box;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            font-size: 24px;
+        }
+        
+        .offer-container ul {
+            padding: 0;
+            list-style: none;
+        }
+        
+        .offer-container ul li {
+            position: relative;
+            padding-left: 40px;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: 0.32px;
+            margin-bottom: 16px;
+        }
+        
+        .offer-container ul li:before {
+            content: '✓';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 100%;
+            background-color: #0080FF;
+            color: white;
+            text-align: center;
+            line-height: 24px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        /* Product List */
+        .products-box {
+            margin-bottom: 26px;
+        }
+        
+        .product-list {
+            padding: 0;
+            margin: 36px 0 0 0;
+        }
+        
+        .product-list li {
+            border-radius: 32px;
+            padding: 8px 16px 8px 64px;
+            background: rgba(235, 235, 235, 0.50);
+            margin-bottom: 8px;
+            position: relative;
+            height: 64px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .product-list li.with-badge {
+            margin-top: 20px;
+        }
+        
+        .product-list li.with-badge:after {
+            content: attr(data-badge);
+            color: #fff;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 130%;
+            display: block;
+            border-radius: 16px 16px 0px 0px;
+            background: #0080FF;
+            width: 240px;
+            height: 16px;
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .product-list li:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 24px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: none;
+            border: 2px solid #BFBFBF;
+        }
+        
+        .product-list li.active {
+            background: rgba(0, 128, 255, 0.08);
+            color: #0080FF;
+        }
+        
+        .product-list li.active:before {
+            background-color: #0080FF;
+            border: none;
+            content: '✓';
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .product-name {
+            flex-shrink: 0;
+            flex-grow: 0;
+            width: 70px;
+        }
+        
+        .product-price {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        
+        .product-price .old-price {
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: 0.28px;
+            text-decoration-line: line-through;
+            color: #818181;
+        }
+        
+        .product-list li.active .product-price .old-price {
+            color: #0080FF;
+        }
+        
+        .product-price .current-price {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 20px;
+            background: #818181;
+            color: #fff;
+            gap: 2px;
+            font-weight: 600;
+            line-height: 1;
+        }
+        
+        .product-price .current-price .currency {
+            font-size: 9px;
+            position: relative;
+            top: 1px;
+        }
+        
+        .product-price .current-price .lead-num {
+            font-size: 24px;
+            line-height: 0.8;
+        }
+        
+        .product-price .current-price .secondary-num {
+            font-size: 14px;
+        }
+        
+        .product-price .current-price .secondary-num > span {
+            font-size: 6px;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .product-list li.active .product-price .current-price {
+            background: #0080FF;
+        }
+        
+        .full-width {
+            width: 100%;
+            margin: 26px 0;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            padding: 24px 48px;
+            border-radius: 48px;
+            font-size: 16px;
+            line-height: 1;
+            font-weight: 500;
+            background: linear-gradient(135deg, #0074E8 0%, #1429DE 55.21%, #2B0087 100%);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .full-width:hover {
+            transform: translateY(-2px);
+        }
+        
+        @keyframes btn-pulse {
+            0% {
+                box-shadow: 0 0 0 0 #0074E8ff;
+            }
+            70% {
+                box-shadow: 0 0 0 10px #0074E800;
+            }
+            100% {
+                box-shadow: 0 0 0 0 #0074E800;
+            }
+        }
+        
+        .pulse {
+            animation: 2s btn-pulse infinite;
+        }
+        
+        /* Secondary text */
+        .secondary-text {
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: 0.24px;
+            color: #A3A3A3;
+            text-align: center;
+            margin: 0;
+        }
+        
+        .secondary-text a {
+            color: inherit;
+        }
+        
+        .text-highlight {
+            color: #002ABF;
+        }
+        
+        .text-highlight2 {
+            color: #f00;
+        }
+        
+        .text-highlight3 {
+            color: #0080FF;
+        }
+        
+        .text-underline {
+            text-decoration: underline;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Testimonials */
         .feedback-widget {
             padding: 16px;
             border: 1px solid #9FC65B;
             background: #FFF;
             box-shadow: 5px 6px 8px 0px rgba(0, 0, 0, 0.25);
-            margin: 10px;
+            margin: 24px 0;
             border-radius: 8px;
             text-align: left;
         }
@@ -217,8 +716,8 @@
         }
         
         .feedback-avatar {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
@@ -233,9 +732,22 @@
             font-size: 14px;
         }
         
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .feedback-message {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #000;
+        }
+        
         .feedback-stars {
             display: flex;
             gap: 2px;
+            margin-top: 4px;
         }
         
         .star {
@@ -245,84 +757,162 @@
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
         }
         
-        .feedback-title {
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 16px;
+        /* FAQ */
+        .faq {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            counter-reset: faq;
         }
         
-        .feedback-message {
-            font-size: 13px;
-            line-height: 1.4;
-            color: #555;
-        }
-        
-        .email-input {
-            width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #e5e5e5;
-            border-radius: 12px;
-            font-size: 16px;
-            margin: 20px 0;
-            background: #fff;
-        }
-        
-        .email-input:focus {
-            outline: none;
-            border-color: #3a78e6;
-        }
-        
-        .continue-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
+        .faq-item {
+            padding: 21px 24px;
+            border-radius: 32px;
+            background: rgba(235, 235, 235, 0.50);
+            position: relative;
             cursor: pointer;
-            margin-top: 20px;
-            transition: transform 0.2s ease;
+            margin-bottom: 10px;
         }
         
-        .continue-btn:hover {
-            transform: translateY(-2px);
+        .faq-item:after {
+            content: '▼';
+            position: absolute;
+            top: 21px;
+            right: 24px;
+            color: #666;
+            transition: transform 0.3s;
         }
         
-        .continue-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .faq-item.active:after {
+            transform: rotate(180deg);
+            color: #0080FF;
         }
         
-        .magic-screen-title {
-            font-size: 24px;
-            margin-bottom: 30px;
-            line-height: 1.4;
+        .faq-title {
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            color: #000;
+            display: inline-block;
+            margin-right: 40px;
         }
         
-        .testimonials-slider {
-            max-width: 400px;
-            margin: 0 auto;
+        .faq-title:before {
+            counter-increment: faq;
+            content: counter(faq) '.';
+            margin-right: 5px;
         }
         
-        .text-additional {
+        .faq-item-body {
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: 0.24px;
+            margin-top: 24px;
+            display: none;
+        }
+        
+        .faq-item.active .faq-item-body {
+            display: block;
+        }
+        
+        .faq-item.active .faq-title {
+            color: #0080FF;
+        }
+        
+        /* Money back guarantee */
+        #money-back {
+            padding: 24px 16px 80px 16px;
+            margin-bottom: 0;
+            border-radius: 24px;
+            border: 4px solid #0074E8;
+            position: relative;
+            text-align: center;
+        }
+        
+        #money-back:after {
+            content: '🏆';
+            font-size: 48px;
+            position: absolute;
+            left: 50%;
+            bottom: -24px;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            border: 4px solid #0074E8;
+        }
+        
+        /* Statistics */
+        .with-percent li {
+            padding: 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            gap: 16px;
+            font-weight: normal;
+            margin-bottom: 24px;
+        }
+        
+        .with-percent li:before {
+            display: none;
+        }
+        
+        .with-percent li .percent {
+            color: #0080FF;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 130%;
+            letter-spacing: -0.64px;
+        }
+        
+        /* Media logos */
+        .list-of-images {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .list-of-images li {
+            padding: 0;
+            margin: 0;
+            width: 60px;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 12px;
             color: #666;
-            margin-top: 10px;
-            line-height: 1.3;
         }
         
-        .loading-text {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
+        .list-of-images li:before {
+            display: none;
         }
         
-        @media (max-width: 500px) {
-            .quiz-container {
+        /* Responsive */
+        @media (max-width: 400px) {
+            .page-wrapper {
                 max-width: 100%;
+            }
+            
+            .offer-container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .timer-wrapper {
+                width: calc(100% - 20px);
+                left: 10px;
+                transform: none;
             }
             
             .slide {
@@ -333,104 +923,86 @@
                 font-size: 24px;
             }
         }
+        
+        /* Utility classes */
+        .truncate-name {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <!-- Header -->
-        <div class="slide-header" id="slideHeader">
-            <div class="header-main">
-                <button class="back-btn" onclick="previousSlide()" id="backBtn">←</button>
-                <div class="logo">Relatio</div>
-                <div class="slide-numbers">
-                    <span id="currentSlide">1</span>/<span id="totalSlides">8</span>
-                </div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-        </div>
-
-        <!-- Slide 1: Gender -->
-        <div class="slide active" id="slide1">
-            <h1>Para começar, qual é o seu <span class="highlight">gênero?</span></h1>
-            <button class="answer-btn" onclick="selectAnswer(this, 'male')">👨 Masculino</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'female')">👩 Feminino</button>
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn1">Continuar</button>
-        </div>
-
-        <!-- Slide 2: Relationship Status -->
-        <div class="slide" id="slide2">
-            <h1>Qual é o <span class="highlight">status atual</span> do relacionamento?</h1>
-            <button class="answer-btn" onclick="selectAnswer(this, 'ended_recently')">Terminou recentemente (menos de 3 meses)</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'ended_while_ago')">Terminou há um tempo (3-12 meses)</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'ended_long_ago')">Terminou há muito tempo (mais de 1 ano)</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'complicated')">É complicado</button>
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn2">Continuar</button>
-        </div>
-
-        <!-- Slide 3: Ex Name -->
-        <div class="slide" id="slide3">
-            <h1>Como se chama a pessoa que você quer <span class="highlight">reconquistar?</span></h1>
-            <input type="text" class="email-input" placeholder="Digite o nome..." id="exNameInput" oninput="validateExName()">
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn3">Continuar</button>
-        </div>
-
-        <!-- Slide 4: Relationship Duration -->
-        <div class="slide" id="slide4">
-            <h1>Por quanto tempo vocês <span class="highlight">estiveram juntos?</span></h1>
-            <button class="answer-btn" onclick="selectAnswer(this, 'few_months')">Alguns meses</button>
-            <button class="answer-btn" onclick="selectAnswer(this, '6_months_1_year')">6 meses a 1 ano</button>
-            <button class="answer-btn" onclick="selectAnswer(this, '1_3_years')">1-3 anos</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'more_than_3')">Mais de 3 anos</button>
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn4">Continuar</button>
-        </div>
-
-        <!-- Slide 5: Contact Frequency -->
-        <div class="slide" id="slide5">
-            <h1>Com que frequência vocês <span class="highlight">se falam</span> atualmente?</h1>
-            <button class="answer-btn" onclick="selectAnswer(this, 'daily')">Diariamente</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'weekly')">Semanalmente</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'monthly')">Mensalmente</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'rarely')">Raramente</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'no_contact')">Não nos falamos</button>
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn5">Continuar</button>
-        </div>
-
-        <!-- Slide 6: Main Goal -->
-        <div class="slide" id="slide6">
-            <h1>Qual é o seu <span class="highlight">principal objetivo?</span></h1>
-            <button class="answer-btn" onclick="selectAnswer(this, 'get_back')">Reconquistar definitivamente</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'improve_relationship')">Melhorar nossa comunicação</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'friendship')">Manter uma amizade</button>
-            <button class="answer-btn" onclick="selectAnswer(this, 'closure')">Ter um encerramento saudável</button>
-            <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn6">Continuar</button>
-        </div>
-
-        <!-- Slide 7: Progress -->
-        <div class="slide" id="slide7">
-            <h1 class="magic-screen-title"><span class="highlight" style="font-size: 36px;">1.3 milhão de pessoas</span><br><em style="font-size: 18px;">escolheram nosso método</em></h1>
-            
-            <div class="progressbar-widget">
-                <div class="circle-progressbar">
-                    <div class="box">
-                        <div class="number" id="progressNumber">0%</div>
+    <div class="page-wrapper">
+        <!-- QUIZ SECTION -->
+        <div class="quiz-container" id="quizContainer">
+            <!-- Header -->
+            <div class="slide-header" id="slideHeader">
+                <div class="header-main">
+                    <button class="back-btn" onclick="previousSlide()" id="backBtn">←</button>
+                    <div class="logo">Relatio</div>
+                    <div class="slide-numbers">
+                        <span id="currentSlide">1</span>/<span id="totalSlides">8</span>
                     </div>
-                    <svg class="circle-svg" width="180" height="180">
-                        <defs>
-                            <linearGradient id="gradient">
-                                <stop offset="0%" stop-color="#d53090"/>
-                                <stop offset="70%" stop-color="#3a78e6"/>
-                                <stop offset="100%" stop-color="#0074E8"/>
-                            </linearGradient>
-                        </defs>
-                        <circle class="circle" cx="90" cy="90" r="80"/>
-                    </svg>
                 </div>
-                <div class="loading-text" id="loadingText">Coletando suas respostas...</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
             </div>
 
-            <div class="testimonials-slider">
+            <!-- Slide 1: Gender -->
+            <div class="slide active" id="slide1">
+                <h1>Para começar, qual é o seu <span class="highlight">gênero?</span></h1>
+                <button class="answer-btn" onclick="selectAnswer(this, 'more_than_3')">Mais de 3 anos</button>
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn4">Continuar</button>
+            </div>
+
+            <!-- Slide 5: Contact Frequency -->
+            <div class="slide" id="slide5">
+                <h1>Com que frequência vocês <span class="highlight">se falam</span> atualmente?</h1>
+                <button class="answer-btn" onclick="selectAnswer(this, 'daily')">Diariamente</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'weekly')">Semanalmente</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'monthly')">Mensalmente</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'rarely')">Raramente</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'no_contact')">Não nos falamos</button>
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn5">Continuar</button>
+            </div>
+
+            <!-- Slide 6: Main Goal -->
+            <div class="slide" id="slide6">
+                <h1>Qual é o seu <span class="highlight">principal objetivo?</span></h1>
+                <button class="answer-btn" onclick="selectAnswer(this, 'get_back')">Reconquistar definitivamente</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'improve_relationship')">Melhorar nossa comunicação</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'friendship')">Manter uma amizade</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'closure')">Ter um encerramento saudável</button>
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn6">Continuar</button>
+            </div>
+
+            <!-- Slide 7: Progress -->
+            <div class="slide" id="slide7">
+                <h1 class="magic-screen-title"><span class="highlight" style="font-size: 36px;">1.3 milhão de pessoas</span><br><em style="font-size: 18px;">escolheram nosso método</em></h1>
+                
+                <div class="progressbar-widget">
+                    <div class="circle-progressbar">
+                        <div class="box">
+                            <div class="number" id="progressNumber">0%</div>
+                        </div>
+                        <svg class="circle-svg" width="180" height="180">
+                            <defs>
+                                <linearGradient id="gradient">
+                                    <stop offset="0%" stop-color="#d53090"/>
+                                    <stop offset="70%" stop-color="#3a78e6"/>
+                                    <stop offset="100%" stop-color="#0074E8"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="circle" cx="90" cy="90" r="80"/>
+                        </svg>
+                    </div>
+                    <div class="loading-text" id="loadingText">Coletando suas respostas...</div>
+                </div>
+
                 <div class="feedback-widget">
                     <div class="feedback-head">
                         <div class="feedback-avatar">C</div>
@@ -442,25 +1014,335 @@
                         </div>
                     </div>
                     <div class="feedback-title">As mesas viraram!</div>
-                    <div class="feedback-message">Ela disse: 'Sinto sua falta, preciso de você, não posso viver sem você!' Nunca pensei que ouviria essas palavras novamente. Há uma semana, nem conversávamos após o término...</div>
+                    <div class="feedback-message">Ela disse: 'Sinto sua falta, preciso de você, não posso viver sem você!' Nunca pensei que ouviria essas palavras novamente...</div>
                 </div>
+            </div>
+
+            <!-- Slide 8: Email -->
+            <div class="slide" id="slide8">
+                <h1>Digite seu email para receber seu<br><span class="highlight">Plano Personalizado</span></h1>
+                <input type="email" class="email-input" placeholder="Digite seu melhor email..." id="emailInput" oninput="validateEmail()">
+                <div class="text-additional">Respeitamos sua privacidade e estamos comprometidos em proteger seus dados pessoais</div>
+                <button class="continue-btn" onclick="showOfferPage()" disabled id="continueBtn8">Receber Plano Gratuito</button>
             </div>
         </div>
 
-        <!-- Slide 8: Email -->
-        <div class="slide" id="slide8">
-            <h1>Digite seu email para receber seu<br><span class="highlight">Plano Personalizado</span></h1>
-            <input type="email" class="email-input" placeholder="Digite seu melhor email..." id="emailInput" oninput="validateEmail()">
-            <div class="text-additional">Respeitamos sua privacidade e estamos comprometidos em proteger seus dados pessoais</div>
-            <button class="continue-btn" onclick="finishQuiz()" disabled id="continueBtn8">Receber Plano Gratuito</button>
+        <!-- OFFER PAGE SECTION -->
+        <div class="offer-container" id="offerContainer">
+            <!-- Timer -->
+            <div class="timer-wrapper">
+                <div class="time">
+                    <span>desconto expira em</span>
+                    <div id="timer">10:00</div>
+                </div>
+                <button class="button" onclick="scrollToProducts()">
+                    OBTER MEU PLANO
+                </button>
+            </div>
+
+            <!-- Promo Section -->
+            <div class="promo">
+                <div class="header">
+                    <span class="header-item">Agora</span>
+                    <span class="header-item">Objetivo</span>
+                </div>
+                <div class="image-widget wo-br">
+                    <div class="image-widget-container">
+                        <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
+                            Seu Plano Personalizado
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="promo-info">
+                    <li>
+                        <div class="icon">🎯</div>
+                        <div class="content">
+                            Objetivo:<br>
+                            <div class="text-highlight3 truncate-name" id="promo-name-block">
+                                Reconquistar <span id="exName">Seu Amor</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">📊</div>
+                        <div class="content">
+                            Probabilidade de Sucesso:<br>
+                            <span class="text-highlight">92% (Alta)</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="icon">⚠️</div>
+                        <div class="content">
+                            Tempo para agir:<br>
+                            <span class="text-highlight2">Urgente*</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <p class="secondary-text">*Baseado no seu perfil, cada semana de hesitação <span class="text-highlight2">diminui</span> sua chance de reconquista em <span class="text-highlight2">33%</span></p>
+            </div>
+
+            <!-- Personal Plan -->
+            <div class="box">
+                <h1 class="text-center title">Aqui está seu Plano Pessoal<br>
+                    <div class="text-highlight3 truncate-name">
+                        Reconquistar <span id="exName2">Seu Amor</span>
+                    </div>
+                </h1>
+                <div class="image-widget wo-br">
+                    <div class="image-widget-container">
+                        <div style="width: 100%; height: 150px; background: linear-gradient(45deg, #0074E8, #002ABF); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: bold;">
+                            Plano Personalizado
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits -->
+            <div class="box">
+                <h2 class="text-center title">A Técnica Mais <span class="text-underline">Cientificamente<br>Validada</span> Para Reconquistar<br>Seu Ex de Volta</h2>
+                
+                <ul>
+                    <li>Você precisa seguir exatamente o plano, e ficará surpreso com a rapidez que ela ficará obcecada com a ideia de estar com você</li>
+                    <li>Você será capaz de criar um senso de desejo tão Poderoso e Incontrolável que ela ficará completamente incapaz de resistir</li>
+                    <li>O cérebro dela será quimicamente programado para pensar em você como seu ÚNICO homem</li>
+                </ul>
+            </div>
+
+            <!-- Products -->
+            <div class="products-box" id="products">
+                <ul class="product-list">
+                    <li class="active with-badge" onclick="changeProduct(this)" data-product="plan-1" data-badge="mais popular">
+                        <span class="product-name">Plano 4 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 4,00</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">1</span>
+                                <span class="secondary-num">99<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li onclick="changeProduct(this)" data-product="plan-2">
+                        <span class="product-name">Plano 12 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 2,24</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">1</span>
+                                <span class="secondary-num">12<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li onclick="changeProduct(this)" data-product="plan-3">
+                        <span class="product-name">Plano 24 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 1,76</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">0</span>
+                                <span class="secondary-num">88<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <button type="button" class="full-width pulse" onclick="selectProduct()">
+                    OBTER MEU PLANO
+                </button>
+
+                <div class="secondary-text">
+                    <p id="plan-description">
+                        Ao clicar em "Obter Meu Plano" você concorda em se inscrever em uma assinatura mensal do serviço. Você pode cancelar a qualquer momento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- What you get -->
+            <div class="box">
+                <h2 class="text-center title">O que você recebe?</h2>
+                
+                <ul>
+                    <li>Técnicas extremamente poderosas e comprovadas para despertar a oxitocina dela, personalizadas com base no seu perfil de relacionamento</li>
+                    <li>Seu ex começará a sonhar com você, se perguntando quando você vai mandar uma mensagem ou ligar para ela</li>
+                    <li>Ela ficará irresistivelmente e incontrolavelmente atraída por você</li>
+                    <li>Ela estará de volta na sua cama, pronta para se comprometer como nunca esteve antes</li>
+                    <li>Ela terá certeza de que foi ideia dela te reconquistar</li>
+                    <li>Você terá confiança e autoestima elevadas</li>
+                </ul>
+            </div>
+
+            <!-- Statistics -->
+            <div class="box promo-list">
+                <h2 class="text-center title">Faça seu Ex ansiar por sua atenção com nosso<br>Plano Pessoal<br><span class="text-highlight3">Reconquiste Seu Ex</span></h2>
+
+                <div class="image-widget">
+                    <div class="image-widget-container">
+                        <div style="width: 100%; height: 100px; background: linear-gradient(90deg, #0080ff, #bf008a); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: bold;">
+                            Resultados Incríveis Alcançados
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="with-percent">
+                    <li>
+                        <span class="percent">94%</span>
+                        <p>dos homens que usam o Relatio <span class="text-highlight3">voltam</span> a ficar com seu <span class="text-highlight3">Ex</span></p>
+                    </li>
+                    <li>
+                        <span class="percent">87%</span>
+                        <p>notaram <span class="text-highlight3">mudanças positivas</span> no comportamento da parceira e <span class="text-highlight3">maior interesse</span> no futuro em comum</p>
+                    </li>
+                    <li>
+                        <span class="percent">72%</span>
+                        <p>tiveram mudanças positivas na sua <span class="text-highlight3">autoestima</span> e na forma como outras pessoas os <span class="text-highlight3">percebem</span></p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Media Coverage -->
+            <div class="box our-techniques">
+                <h2 class="text-center title">Nossas técnicas foram<br>cobertas em:</h2>
+                <ul class="list-of-images">
+                    <li>Forbes</li>
+                    <li>CNN</li>
+                    <li>BBC</li>
+                    <li>TIME</li>
+                    <li>WSJ</li>
+                </ul>
+            </div>
+
+            <!-- Testimonials -->
+            <div class="box">
+                <h2 class="text-center title title-highlight">Nossos clientes amam o Relatio</h2>
+
+                <ul class="comments">
+                    <li>
+                        <div class="feedback-widget">
+                            <div class="feedback-head">
+                                <div class="feedback-avatar">M</div>
+                                <div class="profile">
+                                    <div class="feedback-name">Mark</div>
+                                    <div class="feedback-stars">
+                                        <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feedback-title">O amor da minha vida voltou</div>
+                            <div class="feedback-message">"Isso não está funcionando. Eu não quero mais ficar com você" - ela disse baixinho e foi como um soco no estômago. Com apenas uma frase, meu mundo desabou. Passei noites deitado na cama, olhando para o teto. Quando fiz o quiz do Relatio, estava meio cético. Mas quando comecei a usar meu plano, vi do que vocês estavam falando...</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="feedback-widget">
+                            <div class="feedback-head">
+                                <div class="feedback-avatar">R</div>
+                                <div class="profile">
+                                    <div class="feedback-name">Robert</div>
+                                    <div class="feedback-stars">
+                                        <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feedback-title">Relatio realmente sabe o que faz</div>
+                            <div class="feedback-message">Tenho que dar crédito ao Relatio. Depois que eu e minha garota terminamos, eu estava bombardeando o telefone dela, mandando flores, presentes, mas não importava o quanto eu tentasse, nada parecia funcionar. Não foi até eu usar o Relatio que entendi o que estava errado...</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Second Products Section -->
+            <div class="products-box">
+                <h2 class="text-center title">Aqui está seu Plano Pessoal<br><div class="text-highlight3 truncate-name">Reconquistar <span id="exName3">Seu Amor</span></div></h2>
+                
+                <ul class="product-list">
+                    <li class="active with-badge" onclick="changeProduct(this)" data-product="plan-1" data-badge="mais popular">
+                        <span class="product-name">Plano 4 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 4,00</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">1</span>
+                                <span class="secondary-num">99<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li onclick="changeProduct(this)" data-product="plan-2">
+                        <span class="product-name">Plano 12 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 2,24</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">1</span>
+                                <span class="secondary-num">12<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li onclick="changeProduct(this)" data-product="plan-3">
+                        <span class="product-name">Plano 24 semanas</span>
+                        <div class="product-price">
+                            <span class="old-price">R$ 1,76</span>
+                            <div class="current-price">
+                                <span class="currency">R$ </span>
+                                <span class="lead-num">0</span>
+                                <span class="secondary-num">88<span>por dia</span></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <button type="button" class="full-width pulse" onclick="selectProduct()">
+                    OBTER MEU PLANO
+                </button>
+            </div>
+
+            <!-- FAQ -->
+            <div class="box">
+                <h2 class="text-center title">FAQ</h2>
+                <ul class="faq">
+                    <li class="faq-item" onclick="toggleFaq(this)">
+                        <span class="faq-title">Por que devo escolher este plano?</span>
+                        <div class="faq-item-body">Nossos planos cuidadosamente personalizados são feitos por especialistas para abordar seus desafios de relacionamento e enriquecer sua vida amorosa. Criados por uma equipe de especialistas em relacionamento experientes, esses planos são adaptados para atender suas necessidades individuais, oferecendo soluções e orientações eficazes.</div>
+                    </li>
+                    <li class="faq-item" onclick="toggleFaq(this)">
+                        <span class="faq-title">Como posso me beneficiar deste plano?</span>
+                        <div class="faq-item-body">Este plano é para melhorar seus relacionamentos, independentemente de você estar solteiro ou em um relacionamento comprometido. Atendemos às suas necessidades e objetivos específicos, oferecendo soluções e apoio eficazes.</div>
+                    </li>
+                    <li class="faq-item" onclick="toggleFaq(this)">
+                        <span class="faq-title">O que preciso para ter sucesso?</span>
+                        <div class="faq-item-body">Complete as tarefas diárias, forneça feedback e estude os materiais. Projetamos o plano de forma que cada dia o aproxime do seu objetivo, passo a passo.</div>
+                    </li>
+                    <li class="faq-item" onclick="toggleFaq(this)">
+                        <span class="faq-title">E se for difícil para mim me manter motivado?</span>
+                        <div class="faq-item-body">Não se preocupe! Nosso plano foi projetado para ajudá-lo a construir motivação gradualmente, para que você não precise depender muito dela desde o início. Além disso, estamos aqui para fornecer suporte constante e orientação especializada para mantê-lo motivado durante toda sua jornada.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Money Back Guarantee -->
+            <div class="box" id="money-back">
+                <h2 class="text-center title">Garantia de 30 Dias</h2>
+                <div class="text-center">
+                    Nosso plano é apoiado por uma garantia de 100% de devolução do dinheiro. Estamos tão confiantes em nosso programa que garantimos um reembolso total dentro de 30 dias após a compra se você não vir uma transformação positiva no seu bem-estar íntimo e puder provar que seguiu seu plano conforme orientado.
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Global variables
         let currentSlideIndex = 1;
         let totalSlides = 8;
         let answers = {};
+        let timerInterval;
+        let timerMinutes = 10;
+        let timerSeconds = 0;
         
+        // Initialize
+        updateProgress();
+        updateBackButton();
+        
+        // Quiz functions
         function updateProgress() {
             const progress = (currentSlideIndex / totalSlides) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
@@ -468,17 +1350,10 @@
         }
         
         function selectAnswer(button, value) {
-            // Remove seleção anterior
             const slide = button.closest('.slide');
             slide.querySelectorAll('.answer-btn').forEach(btn => btn.classList.remove('selected'));
-            
-            // Adiciona seleção atual
             button.classList.add('selected');
-            
-            // Salva resposta
             answers[`slide${currentSlideIndex}`] = value;
-            
-            // Habilita botão continuar
             const continueBtn = slide.querySelector('.continue-btn');
             continueBtn.disabled = false;
         }
@@ -514,10 +1389,7 @@
                 return;
             }
             
-            // Esconde slide atual
             document.getElementById(`slide${currentSlideIndex}`).classList.remove('active');
-            
-            // Mostra próximo slide
             currentSlideIndex++;
             document.getElementById(`slide${currentSlideIndex}`).classList.add('active');
             
@@ -528,10 +1400,7 @@
         function previousSlide() {
             if (currentSlideIndex <= 1) return;
             
-            // Esconde slide atual
             document.getElementById(`slide${currentSlideIndex}`).classList.remove('active');
-            
-            // Mostra slide anterior
             currentSlideIndex--;
             document.getElementById(`slide${currentSlideIndex}`).classList.add('active');
             
@@ -565,11 +1434,9 @@
                 progress += 2;
                 progressNumber.textContent = progress + '%';
                 
-                // Atualiza círculo
                 const offset = 503 - (503 * progress / 100);
                 circle.style.strokeDashoffset = offset;
                 
-                // Muda texto periodicamente
                 if (progress % 17 === 0 && textIndex < texts.length - 1) {
                     textIndex++;
                     loadingText.textContent = texts[textIndex];
@@ -584,25 +1451,97 @@
             }, 100);
         }
         
-        function finishQuiz() {
-            // Aqui você pode redirecionar para onde quiser
-            // Por exemplo:
+        function showOfferPage() {
+            // Hide quiz and show offer page
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('offerContainer').classList.add('active');
             
-            // Opção 1: Redirecionar para uma página de obrigado
-            window.location.href = 'https://seusite.com/obrigado';
+            // Update names in offer page
+            const exName = answers.slide3 || 'Seu Amor';
+            document.getElementById('exName').textContent = exName;
+            document.getElementById('exName2').textContent = exName;
+            document.getElementById('exName3').textContent = exName;
             
-            // Opção 2: Abrir em nova aba
-            // window.open('https://seusite.com/plano', '_blank');
-            
-            // Opção 3: Mostrar modal ou mensagem
-            // alert('Obrigado! Seu plano foi enviado para o email: ' + answers.email);
-            
-            console.log('Respostas coletadas:', answers);
+            // Start timer
+            startTimer();
         }
         
-        // Inicialização
-        updateProgress();
-        updateBackButton();
+        // Offer page functions
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (timerSeconds === 0) {
+                    if (timerMinutes === 0) {
+                        clearInterval(timerInterval);
+                        return;
+                    }
+                    timerMinutes--;
+                    timerSeconds = 59;
+                } else {
+                    timerSeconds--;
+                }
+                
+                const minutes = timerMinutes.toString().padStart(2, '0');
+                const seconds = timerSeconds.toString().padStart(2, '0');
+                document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+        
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function changeProduct(element) {
+            // Remove active class from all products
+            document.querySelectorAll('.product-list li').forEach(li => li.classList.remove('active'));
+            // Add active class to selected product
+            element.classList.add('active');
+        }
+        
+        function selectProduct() {
+            // Get selected product
+            const selectedProduct = document.querySelector('.product-list li.active').getAttribute('data-product');
+            
+            // Here you would normally redirect to payment or show a modal
+            // For this demo, we'll just show an alert
+            alert('Redirecionando para o pagamento...');
+            
+            // Example: redirect to your payment page
+            // window.location.href = 'https://seusite.com/pagamento';
+        }
+        
+        function toggleFaq(element) {
+            element.classList.toggle('active');
+        }
+        
+        console.log('Sistema completo carregado com sucesso!');
     </script>
 </body>
-</html>
+</html> 'male')">👨 Masculino</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'female')">👩 Feminino</button>
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn1">Continuar</button>
+            </div>
+
+            <!-- Slide 2: Relationship Status -->
+            <div class="slide" id="slide2">
+                <h1>Qual é o <span class="highlight">status atual</span> do relacionamento?</h1>
+                <button class="answer-btn" onclick="selectAnswer(this, 'ended_recently')">Terminou recentemente (menos de 3 meses)</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'ended_while_ago')">Terminou há um tempo (3-12 meses)</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'ended_long_ago')">Terminou há muito tempo (mais de 1 ano)</button>
+                <button class="answer-btn" onclick="selectAnswer(this, 'complicated')">É complicado</button>
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn2">Continuar</button>
+            </div>
+
+            <!-- Slide 3: Ex Name -->
+            <div class="slide" id="slide3">
+                <h1>Como se chama a pessoa que você quer <span class="highlight">reconquistar?</span></h1>
+                <input type="text" class="email-input" placeholder="Digite o nome..." id="exNameInput" oninput="validateExName()">
+                <button class="continue-btn" onclick="nextSlide()" disabled id="continueBtn3">Continuar</button>
+            </div>
+
+            <!-- Slide 4: Relationship Duration -->
+            <div class="slide" id="slide4">
+                <h1>Por quanto tempo vocês <span class="highlight">estiveram juntos?</span></h1>
+                <button class="answer-btn" onclick="selectAnswer(this, 'few_months')">Alguns meses</button>
+                <button class="answer-btn" onclick="selectAnswer(this, '6_months_1_year')">6 meses a 1 ano</button>
+                <button class="answer-btn" onclick="selectAnswer(this, '1_3_years')">1-3 anos</button>
+                <button class="answer-btn" onclick="selectAnswer(this,
